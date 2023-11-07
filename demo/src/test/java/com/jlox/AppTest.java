@@ -1,4 +1,4 @@
-package demo.src.test.java.com.jlox;
+package com.jlox;
 
 /*
 import static org.junit.Assert.assertTrue;
