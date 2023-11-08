@@ -60,6 +60,7 @@ public class Main {
             String line = reader.readLine();
             if (line == null) break;
             run(line);
+            // Continue running if an error occurs
             hadError = false;
         }
     }
