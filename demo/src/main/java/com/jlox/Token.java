@@ -1,7 +1,5 @@
 package com.jlox;
 
-import com.jlox.TokenType;
-
 public class Token {
     final TokenType tokenType;
     final int line;
