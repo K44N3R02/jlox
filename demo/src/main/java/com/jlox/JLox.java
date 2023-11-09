@@ -8,6 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import com.jlox.TokenType;
+import com.jlox.Token;
+import com.jlox.Scanner;
+
 /**
  * Hello world!
  *

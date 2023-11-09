@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.jlox.TokenType;
+import com.jlox.Token;
+
 public class Scanner {
 
     static final Map<String, TokenType> keywords;
