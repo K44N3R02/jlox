@@ -46,7 +46,7 @@ public class Scanner {
      * Go through source and add each token to this.tokens
      */
     public List<Token> scanTokens() {
-        while (isAtEnd()) {
+        while (!isAtEnd()) {
             // We are at the beginning of the next lexeme
             start = current;
             scanToken();
