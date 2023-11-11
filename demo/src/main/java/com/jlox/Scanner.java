@@ -81,13 +81,13 @@ public class Scanner {
                 addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
                 break;
             case '=':
-                addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
+                addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);
                 break;
             case '>':
-                addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
+                addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
                 break;
             case '<':
-                addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
+                addToken(match('=') ? TokenType.LESS_EQUAL : TokenType.LESS);
                 break;
 
             case '/':
@@ -151,7 +151,6 @@ public class Scanner {
                 advance();
         }
 
-        // Trim surrounding quotes
         addToken(TokenType.NUMBER, Double.parseDouble(source.substring(start, current)));
     }
     
@@ -160,7 +159,7 @@ public class Scanner {
      * TODO add escape chars
      */
     private void lexString() {
-        while (peek() != '\n' && !isAtEnd()) {
+        while (peek() != '"' && !isAtEnd()) {
             if (peek() == '\n')
                 line++;
             advance();
