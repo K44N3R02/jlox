@@ -76,6 +76,7 @@ if __name__ == "__main__":
         "Variable : Token name"
     ])
     define_ast(output_dir, "Stmt", [
+        "Block      : List<Stmt> statements",
         "Expression : Expr expression",
         "Print      : Expr expression",
         "Var        : Token name, Expr initializer"
