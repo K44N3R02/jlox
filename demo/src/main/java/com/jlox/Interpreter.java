@@ -2,8 +2,10 @@ package com.jlox;
 
 import java.util.List;
 
+import com.jlox.Expr.Assign;
+
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
-    private Enviroment enviroment = new Enviroment();
+    private Environment environment = new Environment();
 
     void interpret(List<Stmt> statements) {
         try {
@@ -36,11 +38,18 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             value = evaluate(stmt.initializer);
         }
 
-        enviroment.define(stmt.name.lexeme, value);
+        environment.define(stmt.name.lexeme, value);
         return null;
     }
 
     // Expr.Visitor interface methods
+    @Override
+    public Object visitAssignExpr(Expr.Assign expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, value);
+        return value;
+    }
+    
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
         Object left = evaluate(expr.left);
@@ -85,6 +94,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             case BANG_EQUAL: return !isEqual(left, right);
             
             case EQUAL_EQUAL: return isEqual(left, right);
+            default: break;
         }
         // Unreachable by design
         return null;
@@ -110,7 +120,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 return - (double) right;
             case BANG:
                 return !isTruthy(right);
-
+            default: break;
         }
         // Unreachable by design
         return null;
@@ -118,7 +128,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visitVariableExpr(Expr.Variable expr) {
-        return enviroment.get(expr.name);
+        return environment.get(expr.name);
     }
 
     // Accept methods

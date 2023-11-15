@@ -68,6 +68,7 @@ def define_visitor(f: io.TextIOWrapper, base_name: str, types: list[str]):
 if __name__ == "__main__":
     output_dir = "../demo/src/main/java/com/jlox"
     define_ast(output_dir, "Expr", [
+        "Assign   : Token name, Expr value",
         "Binary   : Expr left, Token operator, Expr right",
         "Grouping : Expr expression",
         "Literal  : Object value",
