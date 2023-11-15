@@ -18,7 +18,7 @@ public class Parser {
     List<Stmt> parse() {
         List<Stmt> statements = new ArrayList<>();
         while (!isAtEnd())
-            statements.add(statement());
+            statements.add(declaration());
         
         return statements;
     }
@@ -46,21 +46,44 @@ public class Parser {
     }
 
     // Statement methods
+    private Stmt declaration() {
+        try {
+            if (match(VAR)) return varDeclaration();
+
+            return statement();
+        } catch (ParseError error) {
+            synchronize();
+            return null;
+        }
+    }
+
     private Stmt statement() {
         if (match(PRINT)) return printStatement();
 
         return expressionStatement();
     }
 
+    private Stmt varDeclaration() {
+        Token name = consume(IDENTIFIER, "Expected variable name.");
+
+        Expr initializer = null;
+        if (match(EQUAL)) {
+            initializer = expression();
+        }
+
+        consume(SEMICOLON, "Expected ';' after variable declaration.");
+        return new Stmt.Var(name, initializer);
+    }
+
     private Stmt printStatement() {
         Expr value = expression();
-        consume(SEMICOLON, "Expect ';' after value.");
+        consume(SEMICOLON, "Expected ';' after value.");
         return new Stmt.Print(value);
     }
 
     private Stmt expressionStatement() {
         Expr expr = expression();
-        consume(SEMICOLON, "Expect ';' after expression.");
+        consume(SEMICOLON, "Expected ';' after expression.");
         return new Stmt.Expression(expr);
     }
     
@@ -133,6 +156,8 @@ public class Parser {
         if (match(NIL)) return new Expr.Literal(null);
         
         if (match(NUMBER, STRING)) return new Expr.Literal(previous().literal);
+
+        if (match(IDENTIFIER)) return new Expr.Variable(previous());
 
         if (match(LEFT_PAREN)) {
             Expr expr = expression();
