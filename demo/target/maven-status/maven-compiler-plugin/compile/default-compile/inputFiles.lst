@@ -1,4 +1,10 @@
+/home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/Stmt.java
+/home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/AstPrinter.java
 /home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/Token.java
+/home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/Interpreter.java
+/home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/RuntimeError.java
+/home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/Parser.java
 /home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/Scanner.java
 /home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/JLox.java
 /home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/TokenType.java
+/home/k44n/Desktop/crafting-interpreters/jlox/demo/src/main/java/com/jlox/Expr.java

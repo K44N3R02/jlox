@@ -1,17 +1,34 @@
 package com.jlox;
 
-public class Interpreter implements Expr.Visitor<Object> {
+import java.util.List;
 
-    void interpret(Expr expr) {
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+
+    void interpret(List<Stmt> statements) {
         try {
-            Object value = evaluate(expr);
-            System.out.println(stringify(value));
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
         } catch (RuntimeError error) {
             JLox.runtimeError(error);
         }
     }
 
-    // Visitor interface methods
+    // Stmt.Visitor interface methods
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print stmt) {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
+        return null;
+    }
+
+    // Expr.Visitor interface methods
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
         Object left = evaluate(expr.left);
@@ -87,11 +104,16 @@ public class Interpreter implements Expr.Visitor<Object> {
         return null;
     }
 
-    // Helper methods
+    // Accept methods
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
+    }
+
     private Object evaluate(Expr expr) {
         return expr.accept(this);
     }
 
+    // Helper methods
     /**
      * @param object
      * @return false if object is `nil` or ̀false`, everything else (including `0` literal) is true
