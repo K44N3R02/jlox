@@ -21,7 +21,7 @@ public class Parser {
         while (!isAtEnd()) {
             statements.add(declaration());
         }
-        
+
         return statements;
     }
 
@@ -33,7 +33,7 @@ public class Parser {
 
             switch (peek().tokenType) {
                 case CLASS:
-                case FUNC:
+                case FUN:
                 case VAR:
                 case FOR:
                 case IF:
@@ -52,6 +52,7 @@ public class Parser {
     // Statement methods
     private Stmt declaration() {
         try {
+            if (match(FUN)) return function("function");
             if (match(VAR)) return varDeclaration();
 
             return statement();
@@ -154,6 +155,41 @@ public class Parser {
         return statements;
     }
 
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        consume(SEMICOLON, "Expected ';' after expression.");
+        return new Stmt.Expression(expr);
+    }
+
+    private Stmt.Function function(String kind) {
+        Token name = consume(IDENTIFIER, "Expected " + kind + " name.");
+        consume(LEFT_PAREN, "Expected '(' after " + kind + " name.");
+
+        List<Token> parameters = new ArrayList<>();
+
+        if (!check(RIGHT_PAREN)) {
+            do {
+                if (parameters.size() >= 255) {
+                    error(peek(), "Can't have more than 255 parameters.");
+                }
+
+                parameters.add(consume(IDENTIFIER, "Expected parameter name."));
+            } while (match(COMMA));
+        }
+        
+        consume(RIGHT_PAREN, "Expected ')' after parameters.");
+        
+        consume(LEFT_BRACE, "Expected '{' before " + kind + " body.");
+        List<Stmt> body = block();
+        return new Stmt.Function(name, parameters, body);
+    }
+
+    private Stmt printStatement() {
+        Expr value = expression();
+        consume(SEMICOLON, "Expected ';' after value.");
+        return new Stmt.Print(value);
+    }
+    
     private Stmt varDeclaration() {
         Token name = consume(IDENTIFIER, "Expected variable name.");
 
@@ -164,18 +200,6 @@ public class Parser {
 
         consume(SEMICOLON, "Expected ';' after variable declaration.");
         return new Stmt.Var(name, initializer);
-    }
-
-    private Stmt printStatement() {
-        Expr value = expression();
-        consume(SEMICOLON, "Expected ';' after value.");
-        return new Stmt.Print(value);
-    }
-
-    private Stmt expressionStatement() {
-        Expr expr = expression();
-        consume(SEMICOLON, "Expected ';' after expression.");
-        return new Stmt.Expression(expr);
     }
     
     // Expression methods
