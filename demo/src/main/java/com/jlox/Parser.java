@@ -66,10 +66,23 @@ public class Parser {
         if (match(FOR)) return forStatement();
         if (match(IF)) return ifStatement();
         if (match(PRINT)) return printStatement();
+        if (match(RETURN)) return returnStatement();
         if (match(WHILE)) return whileStatement();
         if (match(LEFT_BRACE)) return new Stmt.Block(block());
 
         return expressionStatement();
+    }
+
+    private Stmt returnStatement() {
+        Token keyword = previous();
+        Expr value = null;
+
+        if (!check(SEMICOLON)) {
+            value = expression();
+        }
+
+        consume(SEMICOLON, "Expected ';' after return value.");
+        return new Stmt.Return(keyword, value);
     }
 
     private Stmt forStatement() {
@@ -176,7 +189,7 @@ public class Parser {
                 parameters.add(consume(IDENTIFIER, "Expected parameter name."));
             } while (match(COMMA));
         }
-        
+
         consume(RIGHT_PAREN, "Expected ')' after parameters.");
         
         consume(LEFT_BRACE, "Expected '{' before " + kind + " body.");
