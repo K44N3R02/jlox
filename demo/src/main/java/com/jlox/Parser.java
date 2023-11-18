@@ -49,7 +49,7 @@ public class Parser {
         }
     }
 
-    // Statement methods
+    //region Statement Methods
     private Stmt declaration() {
         try {
             if (match(FUN)) return function("function");
@@ -214,8 +214,9 @@ public class Parser {
         consume(SEMICOLON, "Expected ';' after variable declaration.");
         return new Stmt.Var(name, initializer);
     }
+    //endregion
     
-    // Expression methods
+    //region Expression methods
     private Expr expression() {
         return assignment();
     }
@@ -364,8 +365,9 @@ public class Parser {
 
         throw error(peek(), "Expected expression.");
     }
+    //endregion
 
-    // Helper methods
+    //region Helper methods
     private boolean match(TokenType... types) {
         for (TokenType type : types) {
             if (check(type)) {
@@ -404,6 +406,7 @@ public class Parser {
     private Token previous() {
         return tokens.get(current - 1);
     }
+    //endregion
 
     // Error message methods
     private ParseError error(Token token, String message) {
